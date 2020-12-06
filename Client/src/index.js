@@ -5,8 +5,7 @@ import { w3cwebsocket as W3CWebsocket } from "websocket";
 
 const client = new W3CWebsocket("ws://127.0.0.1:8000");
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoibGlubWFwYm94dGFvIiwiYSI6ImNraTc5NWRxdTBpZzcycW85MTRmZ2tjdXQifQ.dxhDLmLuflZW3C1HT88V_w";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESSTOKEN;
 
 class Application extends React.Component {
   constructor(props) {
