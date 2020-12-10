@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDom from "react-dom";
 import mapboxgl from "mapbox-gl";
 import { w3cwebsocket as W3CWebsocket } from "websocket";
+import StylesControl from "mapbox-gl-controls/lib/styles";
 
 const client = new W3CWebsocket("ws://127.0.0.1:8000");
 
@@ -27,6 +28,8 @@ class Application extends React.Component {
       zoom: this.state.zoom,
     });
 
+    map.addControl(new StylesControl(), "top-right");
+
     const handleEvt = () => {
       let s = {
         lng: map.getCenter().lng,
@@ -48,7 +51,7 @@ class Application extends React.Component {
     map.on("zoomend", handleEvt);
     map.on("rotateend", handleEvt);
     map.on("ptichend", handleEvt);
-
+    
     client.onopen = () => {
       console.log("client: connected");
     };
@@ -65,6 +68,12 @@ class Application extends React.Component {
       });
     };
   }
+
+  componentWillUnmout() {
+    console.log('will unmount');
+    client.close();
+  }
+
   render() {
     return (
       <div>
