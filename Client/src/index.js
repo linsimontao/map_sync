@@ -60,11 +60,12 @@ class Application extends React.Component {
       const data = JSON.parse(msg.data);
       console.log("From server: ", data);
 
-      map.jumpTo({
+      map.flyTo({
         center: [data.lng, data.lat],
         zoom: data.zoom,
         pitch: data.pitch,
-        bearing: data.bearing
+        bearing: data.bearing,
+        speed: 0.5
       });
     };
   }

@@ -18,20 +18,30 @@ wsServer.on('request', request => {
     const connection = request.accept(null, request.origin);
     clients.push(connection);
     console.log(clients.length);
-    
+
     connection.on('message', (msg) => {
-        if(msg.type === 'utf8') {
-            clients.forEach((client) => {
-                if(client != connection && client != clients[0]) {
-                    client.sendUTF(msg.utf8Data);
-                }
-            })
+        if (msg.type === 'utf8') {
+            //sync#1 with each other(only don't send to clients[0])
+            // clients.forEach((client) => {
+            //     if(client != connection && client != clients[0]) {
+            //         client.sendUTF(msg.utf8Data);
+            //     }                
+            // })
+
+            //sync#2 only master send out, client don't sync with each other
+            if (connection === clients[0]) {
+                clients.forEach((client) => {
+                    if (client != clients[0]) {
+                        client.sendUTF(msg.utf8Data);
+                    }
+                })
+            }
         }
     });
 
     connection.on('close', (con) => {
-        for(let i = clients.length - 1; i >= 0; i--) {
-            if(clients[i] === connection) {
+        for (let i = clients.length - 1; i >= 0; i--) {
+            if (clients[i] === connection) {
                 clients.splice(i, 1);
             }
         }
